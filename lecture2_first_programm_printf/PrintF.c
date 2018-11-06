@@ -4,8 +4,8 @@
 int main() {
 	int iVar = 56;
 	float fVar = 45.567f;
-	char cStr[] = "Русский текст";
-	CharToOem(cStr, cStr); // перевод Windows 1251 в Windows 866
+	char cStr[] = "Р СѓСЃСЃРєРёР№ С‚РµРєСЃС‚";
+	CharToOem(cStr, cStr); // РїРµСЂРµРІРѕРґ Windows 1251 РІ Windows 866
 	printf("iVaf = %5d\tfVar = %5.2f\tfVar=%6e\n", iVar, fVar, fVar);
 	printf("%25s\n", cStr);
 	printf("%-25s\n", cStr);
