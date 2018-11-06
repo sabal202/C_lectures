@@ -27,7 +27,7 @@ int main() {
 	char cChar = 'a';
 	pChar = &cChar;
 	printf("cChar = %c\tcChar = %p \n", cChar, &cChar);
-    /* Дополнение */
+    
     unsigned char cVar1 = 140, cVar2;
     cVar2 = ~cVar1;
     printf("cVar1 = %d\tcVar2 = %d \n", cVar1, cVar2);
