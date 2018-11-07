@@ -6,7 +6,7 @@ int main() {
     char* pChar;
     int* pInt;
     a = b = 1;
-    s = a + b++;
+    s = a + b+ы+;
     printf("a = %d\tb = %d\ts = %d\n", a, b, s);
     c = d = 3;
     r = c+ ++d;
