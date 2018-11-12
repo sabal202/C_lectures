@@ -82,15 +82,12 @@ double det(int n, double M0[n][n]) {
 	if (n == 2) {
 		return M0[0][0] * M0[1][1] - M0[0][1] * M0[1][0];
 	}
-	/* копия матрицы */
 	double M[n][n];
 	for (int i = 0; i < n; ++i) 
 		for (int j = 0; j < n; ++j) 
 			M[i][j] = M0[i][j];
-	/* шаг рекурсии (разложение по алгебраическим дополнениям по ряду, где нб кол-во 0) */
 	double res = 0;
 
-	/* найдем ряд, где нб кол-во 0 */
 	int ind = 0;
 	int maxnum = 0;
 	for (int i = 0; i < n; ++i) {
@@ -131,6 +128,13 @@ double det(int n, double M0[n][n]) {
 	}
 	
 	return res;
+}
+
+double det2(double ** M0, int n, int i1, int i2, int j1, int j2) {
+	if (n == 2) {
+		return M0[0][0] * M0[1][1] - M0[0][1] * M0[1][0];
+	}
+	
 }
 
 double det_gauss(int n, double M[n][n + 1]) {

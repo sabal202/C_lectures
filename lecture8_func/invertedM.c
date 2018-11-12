@@ -81,7 +81,6 @@ double ** inversed(int n, double M[n][n]) {
 			inversedM[i][j] = ((i + j) % 2 ? -1 : 1) * gauss_det(n - 1, Minor) / detM;
 		}
 	}
-	/* транспонирование */
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n; ++j) {
 			if (j > i) {
