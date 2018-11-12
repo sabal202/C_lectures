@@ -40,7 +40,7 @@ int main() {
 	mul(n, inv, M);
 }
 
-double gauss_det (int n, double M0[n][n]) {
+double gauss_det(int n, double M0[n][n]) {
 	double M[n][n];
 	for (int i = 0; i < n; ++i) 
 		for (int j = 0; j < n; ++j) 
@@ -78,7 +78,10 @@ double ** inversed(int n, double M[n][n]) {
 					c0++;
 				}
 			}
-			inversedM[i][j] = ((i + j) % 2 ? -1 : 1) * gauss_det(n - 1, Minor) / detM;
+			double detA = gauss_det(n - 1, Minor);
+			if (detA != 0)
+				inversedM[i][j] = ((i + j) % 2 ? -1 : 1) * detA / detM;
+			else printf("\nError\n");
 		}
 	}
 	for (int i = 0; i < n; ++i) {
