@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <windows.h>
 
-float sr(float);
-
 int main(int argc, char *argv[], char * envp[]) {
 	char cStr1[] = "Количество передаваемых аргументов:";
 	char cStr2[] = "Имя программы и передаваемые аргументы:\n";
