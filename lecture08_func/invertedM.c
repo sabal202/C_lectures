@@ -17,7 +17,7 @@ double ** new_matrix(int n, int m) {
 int main() {
 	int n;
 	scanf("%d", &n);
-	double M[n][n];
+	double ** M = new_matrix(n, n);
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < n; ++j) 
 			scanf("%lf", &M[i][j]);
