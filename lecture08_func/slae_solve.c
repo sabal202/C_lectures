@@ -1,20 +1,37 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void kramer(int n, double M0[n][n + 1]);
+/*
+Enter n - size of matrix
+Enter matrix n x (n + 1)
+Example:
+3
+1 2 30 1
+2 30 4 1
+30 4 5 1
+*/
 
-void replace_col(int n, int col, double M[n][n], double b[n]);
+void kramer(int n, double ** M0);
 
-double det(int n, double M0[n][n]);
+void replace_col(int n, int col, double ** M, double * b);
 
-double det_gauss(int n, double M[n][n + 1]);
+double det(int n, double ** M0);
 
-void gauss(int n, double M0[n][n + 1]);
+double det_gauss(int n, double ** M);
+
+void gauss(int n, double ** M0);
+
+double ** new_matrix(int n, int m) {
+	double ** M = (double **) calloc(n, sizeof(double *));
+	for (int i = 0; i < n; ++i)
+        M[i] = (double *) calloc(m, sizeof(double));
+    return M;
+}
 
 int main() {
 	int n;
 	scanf("%d", &n);
-	double M[n][n + 1];
+	double ** M = new_matrix(n, n + 1);
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < n + 1; ++j) 
 			scanf("%lf", &M[i][j]);
@@ -32,16 +49,16 @@ int main() {
 }
 
 
-void replace_col(int n, int col, double M[n][n], double b[n]) {
+void replace_col(int n, int col, double ** M, double * b) {
 	for (int i = 0; i < n; ++i)
 		M[i][col] = b[i];
 }
 
-void kramer(int n, double M0[n][n + 1]) {
-	double b[n];
+void kramer(int n, double ** M0) {
+	double * b = (double*) calloc(n, sizeof(double));
 	for (int i = 0; i < n; ++i)
 		b[i] = M0[i][n];
-	double M[n][n];
+	double ** M = new_matrix(n, n);
 	for (int i = 0; i < n; ++i) 
 		for (int j = 0; j < n; ++j) 
 			M[i][j] = M0[i][j];
@@ -52,9 +69,9 @@ void kramer(int n, double M0[n][n + 1]) {
 		return;
 	}
 	printf("Det = %lf\n", detA);
-	double x[n];
+	double * x = (double*) calloc(n, sizeof(double));
 	for (int i = 0; i < n; ++i) {
-		double tempv[n];		
+		double * tempv = (double*) calloc(n, sizeof(double));		
 		for (int j = 0; j < n; ++j) 
 			tempv[j] = M[j][i];
 
@@ -78,11 +95,11 @@ void kramer(int n, double M0[n][n + 1]) {
 	}
 }
 
-double det(int n, double M0[n][n]) {
+double det(int n, double ** M0) {
 	if (n == 2) {
 		return M0[0][0] * M0[1][1] - M0[0][1] * M0[1][0];
 	}
-	double M[n][n];
+	double ** M = new_matrix(n, n);
 	for (int i = 0; i < n; ++i) 
 		for (int j = 0; j < n; ++j) 
 			M[i][j] = M0[i][j];
@@ -105,7 +122,7 @@ double det(int n, double M0[n][n]) {
 	/* magic */
 	for (int j = 0; j < n; ++j) {
 		/* create minor */
-		double Minor[n - 1][n - 1];
+		double ** Minor = new_matrix(n - 1, n - 1);
 		for (int k = 0, c0 = 0; k < n; ++k) {
 			if (k != ind) {
 				for (int l = 0, c1 = 0; l < n; ++l) {
@@ -130,28 +147,25 @@ double det(int n, double M0[n][n]) {
 	return res;
 }
 
-double det2(double ** M0, int n, int i1, int i2, int j1, int j2) {
-	if (n == 2) {
-		return M0[0][0] * M0[1][1] - M0[0][1] * M0[1][0];
-	}
-	
-}
-
-double det_gauss(int n, double M[n][n + 1]) {
+double det_gauss(int n, double ** M) {
 	double res = 1;
 	for (int i = 0; i < n; ++i) 
 		res *= M[i][i];
 	return res;
 }
 
-void gauss(int n, double M0[n][n + 1]) {
-	double M[n][n + 1];
+void gauss(int n, double ** M0) {
+	double ** M = new_matrix(n, n + 1);
 	for (int i = 0; i < n; ++i) 
 		for (int j = 0; j < n + 1; ++j) 
 			M[i][j] = M0[i][j];
 
 	for (int i = 0; i < n - 1; ++i) {
 		for (int j = i + 1; j < n; ++j) {
+			if (M[i][i] == 0) {
+				printf("ERROR Det = 0\n");
+				return;
+			}
 			double k = M[j][i] / M[i][i];
 			for (int l = 0; l < n + 1; ++l) 
 				M[j][l] -= k * M[i][l];
@@ -165,14 +179,13 @@ void gauss(int n, double M0[n][n + 1]) {
 	}
 	double det = det_gauss(n, M);
 	if (det == 0) {
-		printf("Det = 0\n");
+		printf("ERROR Det = 0\n");
 		return;
 	} else {
 		printf("Det = %lf\n", det);
 	}
 
-
-	double x[n];
+	double * x = (double *) calloc(n, sizeof(double));
 	for (int i = n - 1; i >= 0; --i) {
 		double q = M[i][n];
 		for (int j = i + 1; j < n; ++j) {

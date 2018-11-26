@@ -3,15 +3,6 @@
 #include <math.h>
 
 /*
-Есть ли связь между ростом(x) и весом(y)?
-Если есть, то какая эта зависимость? (линейная\не линейная)
-из файла считать рост и вес
-185 60
-190 75
-нужно найти коэффициент корреляции
-если он больше 0.5, то есть линейная зависимость
-найдем уравнение прямой
-экстраполируем
 
 */
 
@@ -29,14 +20,15 @@ double f(double x, double M2, double D2, double D1, double R, double M1) {
 }
 
 int main(int argc, char *argv[]) {
-	// double M1 = () / 8.0;
-	// double M2 = () / 8.0;
-
-	if (argc != 2) {
+	FILE *in;
+	if (argc == 1) {
+		in = open("h_w_list.txt", "r");
+	} else if (argc != 2) {
 		printf("Expected 1 argument, got %d\n", argc - 1);
 		exit(1);
+	} else {
+		in = open(argv[1], "r");
 	}
-	FILE *in = open(argv[1], "r");
 
 	int n = 0;
 	while (!feof(in)) {
@@ -90,7 +82,7 @@ int main(int argc, char *argv[]) {
 	R /= D2;
 	printf("%d\n", n);
 
-	printf("y_r = %lf + (%lf / %lf) * %lf *(x - %lf)\n", M2, D2, D1, R, M1);
+	printf("y = %lf + (%lf / %lf) * %lf *(x - %lf)\n", M2, D2, D1, R, M1);
 	for (int i = 100; i <= 250; i += 5)
 	{
 		printf("%d: %lf\n", i, f(i*1.0, M2, D2, D1, R, M1));
