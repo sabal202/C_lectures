@@ -24,3 +24,4 @@ y = 69.375000 + (7.016721 / 7.888877) * 0.365545 * (x - 181.375000)
 
 ax.plot(x, y)
 plt.show()
+"àáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿ 1234567890-!?(),.ÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
