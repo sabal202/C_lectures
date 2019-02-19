@@ -13,7 +13,7 @@ int main()
 	int (myclass::*f)();
 	myclass ob1(3), ob2(5);
 	myclass *p1, *p2;
-	
+
 	d = &myclass::j;
 	f = &myclass::sq;
 	cout << ".*\n";

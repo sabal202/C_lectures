@@ -4,7 +4,7 @@ using namespace std;
 class myclass {
 	//int i;
 	mutable int i;
-	
+
 public:
 	int geti() const {
 		return i;

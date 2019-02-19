@@ -18,7 +18,7 @@ int main()
 		A[i] = new float[n];
 		C[i] = new float[k];
 	}
-	for (i = 0; i < n; i++) 
+	for (i = 0; i < n; i++)
 	{
 		B[i] = new float[k];
 	}

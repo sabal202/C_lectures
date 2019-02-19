@@ -3,7 +3,7 @@ using namespace std;
 
 class myclass {
 	int a;
-	public:
+public:
 	myclass(int x); // конструктор
 	myclass();
 	void show();
