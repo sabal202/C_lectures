@@ -8,7 +8,7 @@
 
 #include "complex.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 using namespace std;
 
@@ -72,7 +72,7 @@ int main() {
 	cout << "Enter more than 1 command:\n>>> a=b;c=d;\n\n";
 	cout << "Multiply and divide by double inplace:\n>>> a *= 50.32\n\n";
 	cout << "Print variables:\n>>> print a\n>>> print b, c\n\n";
-	cout << "Assign var to simple operation result:\n>>> a = (0, 1) + (1, 0)\n>>> b = d / (9, 1)\n\n"
+	cout << "Assign var to simple operation result:\n>>> a = (0, 1) + (1, 0)\n>>> b = d / (9, 1)\n\n";
 
 	cout << "You are welcome\n";
 	map<string, complex> variables;
@@ -232,6 +232,7 @@ int main() {
 			cout << "variables[" << pair.first << "] = " << pair.second << endl;
 	}
 
+	system("pause");
 
 	return 0;
 }
