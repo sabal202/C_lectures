@@ -1,39 +1,22 @@
-//#define _CRT_SECURE_NO_WARNINGS
+#include "complex.h"
 #include <iostream>
-#include <windows.h>
-using namespace std;
 
-class complex {
-    double re, im;
-public:
-    complex();
-    complex(double x, double y);
-    void get(double &x, double &y);
-    complex operator + (complex z2);
-    complex operator = (complex z2);
-    complex operator - (complex z2);
-    complex operator * (complex z2);
-    complex operator / (complex z2);
-    complex operator *= (double l);
-    complex operator /= (double l);
-    complex operator ++ ();
-    complex operator ++ (int);
-    complex operator -- ();
-    complex operator -- (int);
-    friend bool is_null(complex z);
-};
+std::ostream &operator<<(std::ostream &os, complex const &m) {
+    return os << "(" << m.re << ", " << m.im << ")";
+}
 
 complex::complex() {
-    this->re = this->im = 0;
+    this->re = 0;
+    this->im = 0;
 }
 
 complex::complex(double x, double y) {
-    this->re = x; 
+    this->re = x;
     this->im = y;
 }
 
 void complex::get(double &x, double &y) {
-    x = this->re; 
+    x = this->re;
     y = this->im;
 }
 
@@ -48,6 +31,13 @@ complex complex::operator + (complex z2) {
     complex t;
     t.re = re + z2.re;
     t.im = im + z2.im;
+    return t;
+}
+
+complex complex::operator - (complex z2) {
+    complex t;
+    t.re = re - z2.re;
+    t.im = im - z2.im;
     return t;
 }
 
@@ -107,24 +97,4 @@ complex complex::operator /= (double l) {
     re /= l;
     im /= l;
     return *this;
-}
-
-int main() {
-    complex z1(10, 15), z2(5, 3), z3, z4;
-    double x, y;
-    z3 = z1 + z2;
-    cout << is_null(z4) << endl;
-    z3.get(x, y);
-    cout << "z3 = (" << x << ", " << y << ")" << endl;
-    z4 = z1 / z2;
-    cout << is_null(z4) << endl;
-    z4.get(x, y);
-    cout << "z4 = (" << x << ", " << y << ")" << endl;
-    z4 /= 2;
-    z4 *= 2;
-    z4++;
-    --z4;
-    z4.get(x, y);
-    cout << "z4 = (" << x << ", " << y << ")" << endl;
-    return 0;
 }
