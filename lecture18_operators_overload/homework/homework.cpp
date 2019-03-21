@@ -61,10 +61,14 @@ complex solve(string s) {
 	size_t pos = s.find_first_of("(,-+*/)");
 	complex res;
 	/* will be soon */
-
+	int N = s.length();
+	vector<srting> elements;
+	for (int i = 0; i < N; i++) {
+		if (s[i] == '(' || s[i] == ')' || s[i] == ',' || s[i] == '-' || s[i] == '+' || s[i] == '*' || s[i] == '/')
+	}
 	return res;
 }
-
+// ((9, 1) + a) / (4,5)
 int main() {
 	cout << "You've entered command line (Leave empty line to exit) \n";
 	cout << "You can create complex numbers and work with them: \n\n";
