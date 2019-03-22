@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#define DEBUG 1
+#define DEBUG 0
 template <class X>
 class matrix {
     X **mat;
@@ -13,41 +13,125 @@ public:
     matrix<X>& operator = (const matrix<X> &other);
     ~matrix();
 
-
     void to_triag();
-    X det();
+    X det() const;
 
     // void invert();
-    // template <class T> friend matrix<T> inverted(const matrix<T> &other);
+    template <class T> friend matrix<T> inverted(const matrix<T> &other);
 
     void transponate();
     template <class T> friend matrix<T> transponated(const matrix<T> &other);
-    
 
-    // matrix<X> operator + (const matrix<X> &other);
-    // matrix<X> operator - (const matrix<X> &other);
-    // matrix<X> operator * (const matrix<X> &other);
-    // matrix<X> operator / (const matrix<X> &other);
-    // matrix<X> operator * (X l);
-    // matrix<X> operator / (X l);
-    // matrix<X> operator + (X l);
-    // matrix<X> operator - (X l);
 
-    X* &operator[](int ind);
-
-    // const X*& operator[](int ind) const {
-    //     if (DEBUG) std::cout << "const operator[]: " << this << std::endl;
-    //     return this->mat[ind];
-    // }
+    matrix<X> operator + (const matrix<X> &other) const;
+    matrix<X> operator - (const matrix<X> &other) const;
+    matrix<X> operator * (const matrix<X> &other) const;
+    matrix<X> operator / (const matrix<X> &other) const;
+    matrix<X> operator * (X l) const;
+    matrix<X> operator / (X l) const;
+    matrix<X> operator + (X l) const;
+    matrix<X> operator - (X l) const;
     // template <class I> matrix<X> operator *= (I l);
     // template <class I> matrix<X> operator /= (I l);
-    template <class T> friend std::ostream & operator<< (std::ostream &os, const matrix<T> &M);
+
+    X*& operator[](int ind);
+    X*& operator[](int ind) const;
+
+    template <class T> friend std::ostream & operator<< (std::ostream &os,
+            const matrix<T> &M);
 };
 
 template <class X>
-X* &matrix<X>::operator[](int ind) {
-    // if (DEBUG) std::cout << "Operator[" << ind << "]: " << this << std::endl;
+X*& matrix<X>::operator[](int ind) const {
+    // if (DEBUG) std::cout << "\nconst operator[" << ind << "]: " << this << std::endl;
+
     return this->mat[ind];
+}
+
+template <class X>
+X*& matrix<X>::operator[](int ind) {
+    // if (DEBUG) std::cout << "\nOperator[" << ind << "]: " << this << std::endl;
+
+    return this->mat[ind];
+}
+
+template <class X>
+matrix<X> matrix<X>::operator * (X l) const {
+    matrix<X> res = *this;
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res[i][j] *= l;
+    return res;
+}
+
+template <class X>
+matrix<X> matrix<X>::operator / (X l) const {
+    matrix<X> res = *this;
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res[i][j] /= l;
+    return res;
+}
+
+template <class X>
+matrix<X> matrix<X>::operator - (X l) const {
+    matrix<X> res = *this;
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res[i][j] -= l;
+    return res;
+}
+
+template <class X>
+matrix<X> matrix<X>::operator + (X l) const {
+    matrix<X> res = *this;
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res[i][j] += l;
+    return res;
+}
+
+template <class X>
+matrix<X> matrix<X>::operator*(const matrix<X> &other) const {
+    if (m != other.n)
+        throw std::invalid_argument("Matrixes cannot be multiplicated");
+
+    matrix<X> res(n, other.m);
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < other.m; ++j)
+            for (int k = 0; k < m; ++k)
+                res[i][j] += this->mat[i][k] * other[k][j];
+
+    return res;
+}
+
+template <class X>
+matrix<X> matrix<X>::operator/(const matrix<X> &other) const {
+    matrix<X> res = *this * inverted(other);
+    return res;
+}
+
+template <class X>
+matrix<X> matrix<X>::operator+(const matrix<X> &other) const {
+    if (n < other.n || m < other.m)
+        throw std::invalid_argument("Matrixes of different dimentions");
+
+    matrix<X> res(n, m);
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res[i][j] += other[i][j];
+    return res;
+}
+
+template <class X>
+matrix<X> matrix<X>::operator-(const matrix<X> &other) const {
+    return *this + -1 * other;
 }
 
 template <class X>
@@ -64,10 +148,11 @@ template <class X>
 std::ostream & operator<< (std::ostream &os, const matrix<X> &M) {
     for (int i = 0; i < M.n; ++i) {
         for (int j = 0; j < M.m; ++j)
-            os << M.mat[i][j] << " ";
+            os << M[i][j] << " ";
 
         os << std::endl;
     }
+
     return os;
 }
 
@@ -103,7 +188,7 @@ matrix<X>::matrix(const matrix<X> & other) {
         this->mat[i] = (X*) calloc(m, sizeof(X));
 
         for (int j = 0; j < this->m; ++j)
-            this->mat[i][j] = other.mat[i][j];
+            this->mat[i][j] = other[i][j];
     }
 }
 
@@ -139,6 +224,7 @@ matrix<X>& matrix<X>::operator = (const matrix<X> &other) {
 template <class X>
 matrix<X> transponated(const matrix<X> &other) {
     if (DEBUG) std::cout << "transponated from " << &other << std::endl;
+
     matrix<X> res(other.m, other.n);
 
     for (int i = 0; i < other.m; i++)
@@ -151,6 +237,7 @@ matrix<X> transponated(const matrix<X> &other) {
 template <class X>
 void matrix<X>::transponate() {
     if (DEBUG) std::cout << "transponate " << this << std::endl;
+
     matrix<X> res(this->m, this->n);
 
     for (int i = 0; i < this->m; i++)
@@ -160,17 +247,16 @@ void matrix<X>::transponate() {
     *this = res;
 }
 
-/*template <class X>
+template <class X>
 matrix<X> inverted(const matrix<X> &other) {
     if (DEBUG) std::cout << "inverted from " << &other << std::endl;
+
     int n = other.n;
     int m = other.m;
 
-    if (n != m)
-        throw std::invalid_argument("Matrix is not square");
-
     matrix<X> inversedM(n, m);
     X detM = other.det();
+
     if (detM == 0)
         throw std::invalid_argument("Matrix determinant equals 0");
 
@@ -208,7 +294,7 @@ matrix<X> inverted(const matrix<X> &other) {
     }
 
     return inversedM;
-}*/
+}
 
 template <class X>
 void matrix<X>::to_triag() {
@@ -223,16 +309,24 @@ void matrix<X>::to_triag() {
 }
 
 template <class X>
-X matrix<X>::det() {
-    if (this->n != this->m)
+X matrix<X>::det() const {
+    if (DEBUG) std::cout << "determinant solve in " << this << std::endl;
+
+    if (n != m)
         throw std::invalid_argument("Matrix is not square");
+
+    if (n == 1)
+        return mat[0][0];
+
+    if (n == 2)
+        return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
 
     matrix<X> c = *this;
     c.to_triag();
 
     X res = 1;
 
-    for (int i = 0; i < this->n; i++)
+    for (int i = 0; i < n; i++)
         res *= c[i][i];
 
     return res;
