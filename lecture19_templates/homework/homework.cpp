@@ -26,9 +26,9 @@ int main() {
 
 	cout << L;
 	cout << "Double transponated L and M:" << endl;
-	cout << "L: \n" << L << "M: \n" << M;
+	// cout << "L: \n" << L << "M: \n" << M;
 	L.transponate();
-	cout << "L: \n" << transponated(L) << "M: \n" << M;
+	cout << "L: \n" << transponated(L) << "M: " << endl << M << endl;
 
 	try {
 		cout << "det(M) = " << M.det() << endl;
@@ -45,6 +45,7 @@ int main() {
 	} catch (exception& e) { 
 		cerr << "exception: " << e.what() << endl; 
 	}
+
 
 	cout << "M to triag:" << endl;
 	M.to_triag();

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#define DEBUG 0
+#define DEBUG 1
 template <class X>
 class matrix {
     X **mat;
@@ -62,6 +62,7 @@ matrix<X> matrix<X>::operator * (X l) const {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < m; ++j)
             res[i][j] *= l;
+
     return res;
 }
 
@@ -72,6 +73,7 @@ matrix<X> matrix<X>::operator / (X l) const {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < m; ++j)
             res[i][j] /= l;
+
     return res;
 }
 
@@ -82,6 +84,7 @@ matrix<X> matrix<X>::operator - (X l) const {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < m; ++j)
             res[i][j] -= l;
+
     return res;
 }
 
@@ -92,6 +95,7 @@ matrix<X> matrix<X>::operator + (X l) const {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < m; ++j)
             res[i][j] += l;
+
     return res;
 }
 
@@ -126,6 +130,7 @@ matrix<X> matrix<X>::operator+(const matrix<X> &other) const {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < m; ++j)
             res[i][j] += other[i][j];
+
     return res;
 }
 
@@ -244,6 +249,25 @@ void matrix<X>::transponate() {
         for (int j = 0; j < this->n; j++)
             res[i][j] = this->mat[j][i];
 
+    for (int i = 0; i < this->n; i++)
+        delete[] mat[i];
+
+    delete[] mat;
+    this->n = this->m;
+    this->m = this->n;
+
+    this->mat = (X **) calloc(this->n, sizeof(X*));
+
+    for (int i = 0; i < this->n; ++i)
+        this->mat[i] = (X*) calloc(this->m, sizeof(X));
+
+    for (int i = 0; i < this->n; ++i) {
+        for (int j = 0; j < this->m; ++j)
+            this->mat[i][j] = res[i][j];
+    }
+
+
+
     *this = res;
 }
 
@@ -298,11 +322,14 @@ matrix<X> inverted(const matrix<X> &other) {
 
 template <class X>
 void matrix<X>::to_triag() {
-    for (int i = 0; i < n - 1; ++i) {
-        for (int j = i + 1; j < n; ++j) {
+    // TODO: solve for 0 case
+    for (int i = 0; i < this->n - 1; ++i) {
+        for (int j = i + 1; j < this->n; ++j) {
+            if (this->mat[i][i] == 0) return;
+
             X k = this->mat[j][i] / this->mat[i][i];
 
-            for (int l = 0; l < m; ++l)
+            for (int l = 0; l < this->m; ++l)
                 this->mat[j][l] -= k * this->mat[i][l];
         }
     }
