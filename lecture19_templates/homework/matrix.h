@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#define DEBUG 1
+#define DEBUG 0
 template <class X>
 class matrix {
     X **mat;
@@ -160,12 +160,6 @@ std::ostream & operator<< (std::ostream &os, const matrix<X> &M) {
 
     return os;
 }
-
-/*template <class X>
-class matrix_sq : public matrix<X> {
-public:
-    matrix_sq(int n) : matrix<X>(n, n) { }
-};*/
 
 template <class X>
 matrix<X>::matrix(int n, int m) {
