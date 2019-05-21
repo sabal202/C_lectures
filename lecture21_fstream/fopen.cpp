@@ -17,6 +17,7 @@ int main()
 	fout.close();
 
 	ifstream fin("file"); // открытие файла для ввода
+
 	if (!fin) {
 		cout << "Файл открыть невозможно\n";
 		return 1;
@@ -30,7 +31,5 @@ int main()
 
 	fin.close();
 
-
-	system("pause");
 	return 0;
 }
